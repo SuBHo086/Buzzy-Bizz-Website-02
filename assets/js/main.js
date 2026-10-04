@@ -1477,6 +1477,18 @@ function destroyUpsideButton(button) {
     var opened = false;
     var popupSeenKey = "buzzybiz_enquiry_popup_seen";
 
+    var savedScrollY = 0;
+
+function lockPageScroll() {
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+}
+
+function unlockPageScroll() {
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+}
+
     function hasSeenPopup() {
       try { return sessionStorage.getItem(popupSeenKey) === "1"; }
       catch (e) { return false; }
@@ -1493,6 +1505,8 @@ function destroyUpsideButton(button) {
       markPopupSeen();
       overlay.classList.add("is-open");
       overlay.setAttribute("aria-hidden", "false");
+
+      lockPageScroll();
       setTimeout(function () {
         var first = document.getElementById("bzName");
         if (first) first.focus();
@@ -1501,6 +1515,8 @@ function destroyUpsideButton(button) {
     function closePopup() {
       overlay.classList.remove("is-open");
       overlay.setAttribute("aria-hidden", "true");
+
+      unlockPageScroll();
     }
 
     var timer = window.setTimeout(openPopup, 5000);
