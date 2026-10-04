@@ -16,6 +16,19 @@
     <title>BuzzyBiz — Make Your Business Easier to Find, Trust & Choose</title>
     <link rel="icon" type="image/svg+xml" href="assets/images/logo-favicon.svg" />
     <link rel="stylesheet" href="assets/css/style.css" />
+    <script type="speculationrules">
+        {
+        "prefetch": [
+            {
+            "source": "document",
+            "where": {
+                "href_matches": "/*.html"
+            },
+            "eagerness": "moderate"
+            }
+        ]
+        }
+    </script>
 <style>
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   body { animation: fadeInUp 0.45s ease-out both; }
