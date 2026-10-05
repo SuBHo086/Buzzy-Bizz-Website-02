@@ -1010,3 +1010,17 @@ main [aria-label="Other contact options"] > .container > div[style*="grid-templa
   .footer-anim .footer-bottom::before,
   .footer-anim .footer-bottom p { opacity: 1; transform: none; }
 }
+
+@media (max-width: 1100px) {
+  .header .header-cta {
+    display: none !important;
+  }
+
+  .menu-toggle {
+    display: grid !important;
+  }
+
+  .nav {
+    display: none;
+  }
+}
