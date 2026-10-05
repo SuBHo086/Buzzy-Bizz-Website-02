@@ -474,7 +474,7 @@
       y: 20, stagger: 0.14, duration: 0.85, delay: 0.1, clearProps: "transform"
     });
     var moving = hero.querySelector(".hero-moving");
-    if (moving) tl.from(moving, { x: 30, duration: 1, clearProps: "transform" }, "-=0.55");
+    if (moving) tl.from(moving, { opacity: 0, duration: 0.8, clearProps: "opacity" }, "-=0.55");
   }
 
   function setupInnerHero() {
