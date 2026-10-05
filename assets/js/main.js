@@ -275,40 +275,44 @@
 
   /* ── Mobile nav (preserved from original) ── */
   function setupMobileNav() {
-    var toggle = document.querySelector(".menu-toggle");
-    var nav = document.getElementById("mainNav");
-    if (!toggle || !nav) return;
+  var toggle = document.querySelector(".menu-toggle");
+  var nav = document.getElementById("mainNav");
+  if (!toggle || !nav) return;
 
-    function closeMenu() {
-      nav.classList.remove("is-open");
-      toggle.setAttribute("aria-expanded", "false");
-      document.body.classList.remove("menu-open");
-    }
+  var BREAKPOINT = 1100; // must match the CSS
 
-    toggle.addEventListener("click", function () {
-      var isOpen = nav.classList.toggle("is-open");
-      toggle.classList.toggle("is-open", isOpen);
-      toggle.setAttribute("aria-expanded", String(isOpen));
-      document.body.classList.toggle("menu-open", isOpen);
-    });
-
-    nav.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", closeMenu);
-    });
-
-    document.addEventListener("click", function (event) {
-      if (!nav.classList.contains("is-open")) return;
-      if (!nav.contains(event.target) && !toggle.contains(event.target)) closeMenu();
-    });
-
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") closeMenu();
-    });
-
-    window.addEventListener("resize", function () {
-      if (window.innerWidth > 820) closeMenu();
-    });
+  function setOpen(open) {
+    nav.classList.toggle("is-open", open);
+    toggle.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+    document.body.classList.toggle("menu-open", open);
   }
+
+  toggle.addEventListener("click", function () {
+    setOpen(!nav.classList.contains("is-open"));
+  });
+
+  nav.querySelectorAll("a").forEach(function (link) {
+    link.addEventListener("click", function () { setOpen(false); });
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!nav.classList.contains("is-open")) return;
+    if (!nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && nav.classList.contains("is-open")) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > BREAKPOINT) setOpen(false);
+  });
+}
 
   /* ── Contact form (preserved from original) ── */
   function setupContactForm() {
@@ -1256,6 +1260,7 @@ function destroyUpsideButton(button) {
     social:{number:'04',title:'Social Media Management',copy:'Plan and manage social content that keeps the brand recognizable, useful, and connected with its audience.',points:['Content planning and scheduling','Brand-consistent communication','Ongoing social presence management'],href:'services.html#social',image:'assets/images/bz-service-social.svg'},
     website:{number:'05',title:'Website Creation',copy:'Create responsive websites that communicate clearly, feel trustworthy, and guide visitors toward action.',points:['Responsive page structure and UI','Clear content and conversion paths','Professional, maintainable front-end build'],href:'services.html#website',image:'assets/images/bz-service-website.svg'}
   };
+    window.bzServiceData = data;
   let active='seo';
   let timer=null;
   function select(key){
@@ -1285,7 +1290,7 @@ function destroyUpsideButton(button) {
    Mobile Nurturing service accordion
    ============================================================ */
 (function setupMobileNurturingAccordion() {
-  const mq = window.matchMedia('(max-width: 700px)');
+  const mq = window.matchMedia('(max-width: 1100px)');
 
   function getShowcase() {
     return document.querySelector('.bz-showcase');
@@ -1573,3 +1578,4 @@ function unlockPageScroll() {
     setupBuzzyEnquiryPopup();
   }
 })();
+

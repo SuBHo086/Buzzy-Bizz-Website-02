@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head data-desktop-overflow-fixed="true">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,21 +33,30 @@
 <body>
 
     <header class="header" role="banner" aria-label="Site header">
-        <div class="container">
-            <a href="index.html" class="logo" aria-label="BuzzyBiz Home">Buzzy<span>Biz</span></a>
-            <nav class="nav" aria-label="Primary navigation" role="navigation" id="mainNav">
-                <a href="index.html">Home</a>
-                <a href="services.html">Services</a>
-                <a href="our-work.html">Our Work</a>
-                <a href="about.html">About</a>
-                <a href="reviews.html">Reviews</a>
-                <a href="contact.html" aria-current="page">Contact</a>
-            </nav>
-        <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </header>
+  <div class="container">
+    <a href="index.html" class="logo" aria-label="BuzzyBiz Home">Buzzy<span>Biz</span></a>
+
+    <nav class="nav nav-glass" aria-label="Primary navigation" id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="our-work.html">Our Work</a>
+      <a href="about.html" aria-current="page">About</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="nav-cta-mobile">Get a Free Consultation →</a>
+    </nav>
+
+    <a href="contact.html" class="cta-button cta-button-primary mag-btn header-cta">
+      Get a Free Consultation <span class="btn-icon">→</span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mainNav">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+  </div>
+</header>
 
     <main role="main">
         <!-- Contact Hero -->
@@ -58,20 +66,6 @@
             <div class="inner-hero-dots" aria-hidden="true"></div>
             <div class="inner-hero-bg-text" aria-hidden="true">CONTACT</div>
 
-            <div class="inner-hero-project inner-hero-project-left" aria-hidden="true">
-                <div class="inner-hero-project-label">E-commerce<br>Website</div>
-                <div class="inner-hero-project-image"><img src="assets/images/hero-1.jpg" alt=""></div>
-            </div>
-
-            <div class="inner-hero-project inner-hero-project-right" aria-hidden="true">
-                <div class="inner-hero-project-label">Restaurant<br>Website</div>
-                <div class="inner-hero-project-image"><img src="assets/images/hero-2.jpg" alt=""></div>
-            </div>
-
-            <div class="inner-hero-project inner-hero-project-bottom" aria-hidden="true">
-                <div class="inner-hero-project-image"><img src="assets/images/hero-3.jpg" alt=""></div>
-                <div class="inner-hero-project-label">Business<br>Website</div>
-            </div>
 
             <div class="container inner-hero-content">
                 <div class="inner-hero-kicker">BUZZYBIZ · DIGITAL GROWTH</div>

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head data-desktop-overflow-fixed="true">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,30 +33,33 @@
   body { animation: fadeInUp 0.45s ease-out both; }
 </style>
 </head>
-</div>
 <body>
-
-    <!-- Orb background decorations -->
 
 <!-- Header -->
 <header class="header" role="banner" aria-label="Site header">
-    <div class="container">
-        <a href="index.html" class="logo" aria-label="BuzzyBiz Home">Buzzy<span>Biz</span></a>
-        <nav class="nav nav-glass" aria-label="Primary navigation" role="navigation" id="mainNav">
-            <a href="index.html" aria-current="page">Home</a>
-            <a href="services.html">Services</a>
-            <a href="our-work.html">Our Work</a>
-            <a href="about.html">About</a>
-            <a href="reviews.html">Reviews</a>
-                        <a href="contact.html">Contact</a>
-        </nav>
-        <a href="contact.html" class="cta-button cta-button-primary mag-btn" style="margin-left: auto; padding: 0.5rem 1.25rem; border-radius: 9999px; font-weight: 600;">Get a Free Consultation <span class="btn-icon">→</span></a>
-        <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-        </button>
-    </div>
+  <div class="container">
+    <a href="index.html" class="logo" aria-label="BuzzyBiz Home">Buzzy<span>Biz</span></a>
+
+    <nav class="nav nav-glass" aria-label="Primary navigation" id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="our-work.html">Our Work</a>
+      <a href="about.html" aria-current="page">About</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="nav-cta-mobile">Get a Free Consultation →</a>
+    </nav>
+
+    <a href="contact.html" class="cta-button cta-button-primary mag-btn header-cta">
+      Get a Free Consultation <span class="btn-icon">→</span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mainNav">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+  </div>
 </header>
 
     <!-- Hero Split Section -->
@@ -85,51 +87,16 @@
         </div>
     </section>
 
-    <!-- Services -->
-    <!-- <section id="services" class="section services" aria-label="Services overview">
-        <div class="container">
-            <h2>How BuzzyBiz can help</h2>
-            <div class="services-grid">
-                <article class="service-card">
-                    <div class="service-icon" aria-label="SEO icon">★</div>
-                    <h3>SEO Optimization</h3>
-                    <p>Improve a website’s search visibility and attract relevant organic traffic.</p>
-                    <a href="services.html#seo">Learn more →</a>
-                </article>
-                <article class="service-card">
-                    <div class="service-icon" aria-label="GBP icon">★</div>
-                    <h3>Google Business Profile (GBP)</h3>
-                    <p>Improve how a business appears in local Google Search and Maps.</p>
-                    <a href="services.html#gbp">Learn more →</a>
-                </article>
-                <article class="service-card">
-                    <div class="service-icon" aria-label="LinkedIn icon">★</div>
-                    <h3>LinkedIn Management</h3>
-                    <p>Build a consistent professional presence through profile management and content.</p>
-                    <a href="services.html#linkedin">Learn more →</a>
-                </article>
-                <article class="service-card">
-                    <div class="service-icon" aria-label="Social Media icon">★</div>
-                    <h3>Social Media Management</h3>
-                    <p>Plan and manage social content to strengthen brand presence and communication.</p>
-                    <a href="services.html#social">Learn more →</a>
-                </article>
-                <article class="service-card">
-                    <div class="service-icon" aria-label="Website icon">★</div>
-                    <h3>Website Creation</h3>
-                    <p>Create clear, responsive websites that present the business professionally.</p>
-                    <a href="services.html#website">Learn more →</a>
-                </article>
-            </div>
-        </div>
-    </section> -->
 
     <!-- BuzzyBiz Interactive Service Showcase -->
     <section class="section bz-showcase" aria-label="What BuzzyBiz can do for you">
         <div class="container">
             <div class="bz-showcase-heading">
                 <p class="bz-kicker">WHAT WE DO</p>
-                <h2>Nurturing Brand Journeys, Curating Innovative Solutions, Scaling Growth</h2>
+                <h2>
+                    <span class="bz-h-line">Nurturing Brand Journeys, Curating Innovative</span>
+                    <span class="bz-h-line">Solutions, Scaling Growth</span>
+                </h2>
             </div>
 
             <div class="bz-showcase-shell">
@@ -340,10 +307,3 @@
 
 </body>
 </html>
-<style>
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  body { animation: fadeInUp 0.45s ease-out both; }
-</style>
