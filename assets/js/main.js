@@ -58,23 +58,21 @@
   }
 
   /* ── Scroll reveals via ScrollTrigger ── */
-  function setupReveal() {
+    function setupReveal() {
     if (prefersReducedMotion) return;
     var elements = document.querySelectorAll(".reveal-on-scroll");
     if (!elements.length) return;
 
     elements.forEach(function (el) {
-      // Skip elements already visible (e.g. on quick load)
-      if (el.classList.contains("is-visible")) return;
-
       gsap.fromTo(el,
-        { opacity: 0, y: 20 },
+        { opacity: 0, y: 16 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.85,
+          duration: .7,
           ease: "power2.out",
-          scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" }
+          clearProps: "opacity,transform",
+          scrollTrigger: { trigger: el, start: "top 90%", once: true }
         }
       );
     });
@@ -201,52 +199,27 @@
 
 
   /* ── Reference-style inner hero motion ── */
-  function setupInnerHero() {
+      function setupInnerHero() {
     var hero = document.querySelector('.inner-hero');
-    if (!hero || typeof gsap === 'undefined') return;
-    var projects = hero.querySelectorAll('.inner-hero-project');
-    var bg = hero.querySelector('.inner-hero-bg-text');
-    var title = hero.querySelector('h1');
-    var text = hero.querySelector('p');
-    var cats = hero.querySelectorAll('.inner-hero-cats .service-cat');
-    var line = hero.querySelector('.inner-hero-line span');
+    if (!hero || typeof gsap === 'undefined' || prefersReducedMotion) return;
 
-    if (prefersReducedMotion) return;
+    var items = [
+      hero.querySelector('.inner-hero-kicker'),
+      hero.querySelector('h1'),
+      hero.querySelector('.inner-hero-content > p'),
+      hero.querySelector('.inner-hero-line'),
+      hero.querySelector('.hero-chips'),
+      hero.querySelector('.inner-hero-note')
+    ].filter(Boolean);
 
-    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    gsap.set(projects, { opacity: 0, scale: .9 });
-    gsap.set([title, text, line, cats], { opacity: 0, y: 24 });
-    gsap.set(bg, { opacity: 0, scale: .94 });
-
-    tl.to(bg, { opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out' })
-      .to(title, { opacity: 1, y: 0, duration: 1 }, '-=.8')
-      .to(text, { opacity: 1, y: 0, duration: .85 }, '-=.65')
-      .to(line, { opacity: 1, y: 0, duration: .6 }, '-=.45')
-      .to(cats, { opacity: 1, y: 0, duration: .7, stagger: .1 }, '-=.35')
-
-    projects.forEach(function (project, i) {
-      gsap.to(project, {
-        y: i === 1 ? -10 : 10,
-        duration: 3.2 + i * .5,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: .9 + i * .15
-      });
+    gsap.from(items, {
+      opacity: 0,
+      y: 14,
+      duration: .10,
+      stagger: .07,
+      ease: 'power2.out',
+      clearProps: 'opacity,transform'
     });
-
-    if (typeof ScrollTrigger !== 'undefined') {
-      gsap.to(projects, {
-        yPercent: -12,
-        ease: 'none',
-        scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: 1 }
-      });
-      gsap.to(bg, {
-        yPercent: 10,
-        ease: 'none',
-        scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: 1 }
-      });
-    }
   }
 
   /* ── Init ── */
@@ -264,8 +237,6 @@
     setupFloatingMockups();
     setupHeroProgress();
     setupMagneticButtons();
-    setupUpsideDown();
-    restoreUpsideDownState();
   });
 
   /* ── Mobile nav (preserved from original) ── */
@@ -357,237 +328,6 @@
     });
   }
 })();
-
-/* =========================================================
-   UPSIDE DOWN MODE
-   ========================================================= */
-
-function setupUpsideDown() {
-
-  var trigger = document.getElementById("upsideTrigger");
-  var modal = document.getElementById("upsideModal");
-  var noButton = document.getElementById("upsideNo");
-  var yesButton = document.getElementById("upsideYes");
-
-  if (!trigger || !modal || !noButton || !yesButton) return;
-
-  /* Prevent duplicate setup */
-  if (trigger.dataset.upsideReady === "true") return;
-
-  trigger.dataset.upsideReady = "true";
-
-
-  /* =======================================================
-     UPSIDE DOWN BUTTON
-     ======================================================= */
-
-  trigger.addEventListener("click", function (event) {
-  event.preventDefault();
-  event.stopPropagation();
-
-  if (document.documentElement.classList.contains("upside-down")) {
-    toggleUpsideDown();
-    return;
-  }
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-  modal.classList.add("is-open");
-  modal.setAttribute("aria-hidden", "false");
-});
-
-
-  /* =======================================================
-     NO BUTTON
-     ======================================================= */
-
-  noButton.addEventListener("click", function (event) {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    closeUpsideWarning();
-
-  });
-
-
-  /* =======================================================
-     YES BUTTON
-     ======================================================= */
-
-  yesButton.addEventListener("click", function (event) {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    var warning =
-      modal.querySelector(".upside-warning");
-
-    if (!warning) return;
-
-    /* Prevent double clicking */
-    if (
-      warning.classList.contains("upside-shatter")
-    ) {
-      return;
-    }
-
-    createUpsidePieces(warning);
-
-    warning.classList.add("upside-shatter");
-
-    setTimeout(function () {
-
-    closeUpsideWarning();
-
-    startUpsideEntryTransition();
-
-  }, 700);
-
-  });
-
-
-  /* =======================================================
-     CLICK OUTSIDE WARNING
-     ======================================================= */
-
-  modal.addEventListener("click", function (event) {
-
-    if (event.target === modal) {
-      closeUpsideWarning();
-    }
-
-  });
-
-
-  /* Initialize chaos listeners ONCE */
-  setupUpsideDownChaos();
-
-}
-
-
-/* =========================================================
-   CLOSE WARNING
-   ========================================================= */
-
-function closeUpsideWarning() {
-
-  var modal =
-    document.getElementById("upsideModal");
-
-  if (!modal) return;
-
-  modal.classList.remove("is-open");
-
-  modal.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-  var warning =
-    modal.querySelector(".upside-warning");
-
-  if (warning) {
-
-    warning.classList.remove(
-      "upside-shatter"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   TOGGLE UPSIDE DOWN
-   ========================================================= */
-
-function toggleUpsideDown() {
-
-  var html = document.documentElement;
-
-
-  /* =======================================================
-     RETURN TO NORMAL
-     ======================================================= */
-
-  if (
-    html.classList.contains("upside-down")
-  ) {
-
-    html.classList.remove(
-      "upside-down"
-    );
-
-    sessionStorage.removeItem(
-      "buzzyUpsideDown"
-    );
-
-    closeUpsideWarning();
-
-
-    /* Restore moved elements */
-    document.querySelectorAll(
-      "[data-upside-moved='true']"
-    ).forEach(function (element) {
-
-      element.style.position = "";
-      element.style.left = "";
-      element.style.top = "";
-      element.style.zIndex = "";
-
-      element.removeAttribute(
-        "data-upside-moved"
-      );
-
-    });
-
-
-    /* Restore destroyed elements */
-    document.querySelectorAll(
-      "[data-upside-destroyed='true']"
-    ).forEach(function (element) {
-
-      element.style.visibility = "";
-
-      element.removeAttribute(
-        "data-upside-destroyed"
-      );
-
-    });
-
-
-    /* Remove leftover explosion pieces */
-    document.querySelectorAll(
-      ".upside-button-piece, .upside-piece"
-    ).forEach(function (piece) {
-
-      piece.remove();
-
-    });
-
-    return;
-  }
-
-
-  /* =======================================================
-     ENTER UPSIDE DOWN
-     ======================================================= */
-
-  html.classList.add(
-    "upside-down"
-  );
-
-  sessionStorage.setItem(
-    "buzzyUpsideDown",
-    "true"
-  );
-
-}
-
 
 /* =========================================================
    RESTORE AFTER PAGE CHANGE / REFRESH
@@ -1308,30 +1048,16 @@ function destroyUpsideButton(button) {
     return item.dataset.service || item.dataset.serviceKey || String(index);
   }
 
-  function findPanelData(panel, key, index) {
-    if (!panel) return { background: '', title: '', description: '', points: [] };
-
-    const source = panel.querySelector(`[data-service="${CSS.escape(key)}"]`);
-    const el = source || panel;
-
-    const bg = getComputedStyle(el).backgroundImage;
-    const img = el.querySelector('img');
-    const title = el.querySelector('h2, h3, h4');
-    const desc = el.querySelector('p');
-    const pointEls = Array.from(el.querySelectorAll('li, .point, .service-point'));
-
-    let background = '';
-    if (bg && bg !== 'none') {
-      const match = bg.match(/url\(["']?(.*?)["']?\)/);
-      if (match) background = match[1];
-    }
-    if (!background && img) background = img.currentSrc || img.src || '';
-
+    function findPanelData(a, b) {
+    // Works whether called as (key) or (panel, key, index)
+    var key = (typeof a === 'string') ? a : b;
+    var d = window.bzServiceData && window.bzServiceData[key];
+    if (!d) return { background: '', title: '', description: '', points: [] };
     return {
-      background,
-      title: title ? title.textContent.trim() : '',
-      description: desc ? desc.textContent.trim() : '',
-      points: pointEls.slice(0, 4).map(p => p.textContent.trim()).filter(Boolean)
+      background: d.image,
+      title: d.title,
+      description: d.copy,
+      points: d.points
     };
   }
 
@@ -1428,18 +1154,27 @@ function destroyUpsideButton(button) {
     const items = getItems(showcase);
     const panel = getPanel(showcase);
 
-    items.forEach((item, index) => {
+        items.forEach(function (item, index) {
       if (item.dataset.mobileAccordionReady === 'true') return;
       item.dataset.mobileAccordionReady = 'true';
       item.setAttribute('aria-expanded', 'false');
 
-      const button = item.querySelector('.bz-mobile-accordion-control');
-      if (!button) return;
-
-      button.addEventListener('click', function(e) {
+      // Tapping anywhere on the row (name or +) toggles it
+      item.addEventListener('click', function (e) {
+        if (!mq.matches) return;
         e.preventDefault();
         e.stopPropagation();
-        if (mq.matches) toggle(item, index, items, panel);
+        toggle(item, index, items);
+        item.blur();
+      });
+
+      // Keyboard: Enter or Space on the row
+      item.addEventListener('keydown', function (e) {
+        if (!mq.matches) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggle(item, index, items);
+        }
       });
     });
   }
@@ -1574,3 +1309,32 @@ function unlockPageScroll() {
   }
 })();
 
+/* Footer entrance animation */
+(function () {
+  function setupFooterAnimation() {
+    var footer = document.querySelector(".footer");
+    if (!footer) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!("IntersectionObserver" in window)) return;
+
+    // Hide only once JS is confirmed running, so the footer never stays invisible
+    footer.classList.add("footer-anim");
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          footer.classList.add("footer-in");
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.12 });
+
+    observer.observe(footer);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupFooterAnimation);
+  } else {
+    setupFooterAnimation();
+  }
+})();
