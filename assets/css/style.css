@@ -1671,6 +1671,7 @@ html.upside-down body {
     opacity .28s ease;
   will-change: transform;
   pointer-events: none;
+  
 }
 .bz-service-name {
   display: block;
@@ -2925,7 +2926,7 @@ button:hover,
 /* Fix: lingering transforms break position:fixed */
 html { animation: none !important; }
 @keyframes bzFade { from { opacity: 0; } to { opacity: 1; } }
-body { animation: bzFade .45s ease-out both !important; }
+body { animation: none !important; }
 
 :root { --header-height: 76px; }
 
@@ -3317,4 +3318,44 @@ body { animation: bzFade .45s ease-out both !important; }
   background: #F2B31D !important;
   color: #17171A !important;
   border-color: #F2B31D !important;
+}
+
+/* =========================================================
+   SMOOTH PAGE-TO-PAGE TRANSITIONS
+   ========================================================= */
+/* @view-transition { navigation: auto; } */
+
+/* Page content cross-fades */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: .35s;
+  animation-timing-function: cubic-bezier(.4, 0, .2, 1);
+}
+
+/* Header stays in place; only the active-link highlight cross-fades */
+.header { view-transition-name: site-header; }
+::view-transition-group(site-header) { animation-duration: 0s; }
+::view-transition-old(site-header),
+::view-transition-new(site-header) { animation-duration: .25s; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}
+
+.bz-showcase .bz-service-inner {
+  transition: transform .55s cubic-bezier(.2,.75,.2,1), opacity .4s ease;
+}
+
+/* Ink sections: ivory cards with Ink text (About: Our Approach)  dont touch it */
+.bz-target-ink .why-point {
+  background: #FAF7F0 !important;
+  border-color: rgba(250, 247, 240, .18) !important;
+}
+
+/* Ink sections: white headings, no highlight bar */
+.bz-target-ink h2 .yellow-highlight {
+  color: #FAF7F0 !important;
+  background: none !important;
 }

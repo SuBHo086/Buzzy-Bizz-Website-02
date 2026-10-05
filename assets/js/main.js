@@ -21,13 +21,13 @@
 
     // Animate heading + paragraph together, then buttons with a stagger
     tl.from(hero.querySelectorAll("h1, p, .cta-buttons"),
-      { y: 40, opacity: 0, stagger: 0.12, duration: 0.8, delay: 0.15 }
+      { y: 20, opacity: 0, stagger: 0.14, duration: 0.85, delay: 0.1 }
     );
 
     // On the index page, also bring in the carousel panel
     var movingEl = hero.querySelector(".hero-moving");
     if (movingEl) {
-      tl.from(movingEl, { x: 60, opacity: 0, duration: 1 }, "-=0.5");
+      tl.from(movingEl, { x: 30, opacity: 0, duration: 1 }, "-=0.55");
     }
   }
 
@@ -49,10 +49,10 @@
       current = (current + 1) % images.length;
       var next = images[current];
 
-      gsap.to(prev, { opacity: 0, scale: 1.03, duration: 0.6, ease: "power2.inOut" });
+      gsap.to(prev, { opacity: 0, scale: 1.03, duration: 0.9, ease: "power2.inOut" });
       gsap.fromTo(next,
         { opacity: 0, scale: 1.03 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: "power2.out" }
+        { opacity: 1, scale: 1, duration: 1.1, ease: "power2.out" }
       );
     }, 4000);
   }
@@ -68,17 +68,13 @@
       if (el.classList.contains("is-visible")) return;
 
       gsap.fromTo(el,
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.7,
+          duration: 0.85,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 88%",
-            toggleActions: "play none none none"
-          }
+          scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" }
         }
       );
     });
@@ -222,12 +218,11 @@
     gsap.set([title, text, line, cats], { opacity: 0, y: 24 });
     gsap.set(bg, { opacity: 0, scale: .94 });
 
-    tl.to(bg, { opacity: 1, scale: 1, duration: 1.1, ease: 'power2.out' })
-      .to(title, { opacity: 1, y: 0, duration: .8 }, '-=.65')
-      .to(text, { opacity: 1, y: 0, duration: .65 }, '-=.5')
-      .to(line, { opacity: 1, y: 0, duration: .45 }, '-=.35')
-      .to(cats, { opacity: 1, y: 0, duration: .55, stagger: .08 }, '-=.25')
-      .to(projects, { opacity: 1, scale: 1, duration: .85, stagger: .12, ease: 'back.out(1.15)' }, '-=.7');
+    tl.to(bg, { opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out' })
+      .to(title, { opacity: 1, y: 0, duration: 1 }, '-=.8')
+      .to(text, { opacity: 1, y: 0, duration: .85 }, '-=.65')
+      .to(line, { opacity: 1, y: 0, duration: .6 }, '-=.45')
+      .to(cats, { opacity: 1, y: 0, duration: .7, stagger: .1 }, '-=.35')
 
     projects.forEach(function (project, i) {
       gsap.to(project, {
