@@ -3359,3 +3359,8 @@ body { animation: none !important; }
   color: #FAF7F0 !important;
   background: none !important;
 }
+
+/* Thin ivory divider between the final CTA and the footer */
+.final-cta {
+  border-bottom: 1px solid rgba(250, 247, 240, .35) !important;
+}
