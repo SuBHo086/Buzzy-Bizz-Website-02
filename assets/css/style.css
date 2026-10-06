@@ -140,12 +140,8 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.55rem); }
   background: var(--honey);
   box-shadow: 0 6px 18px rgba(242, 179, 29, .22);
 }
-.nav a[aria-current="page"] { animation: navHighlightPop .45s cubic-bezier(.34, 1.56, .64, 1) both; }
-@keyframes navHighlightPop {
-  0%   { transform: scale(.92) translateY(2px); opacity: .7; }
-  70%  { transform: scale(1.04) translateY(-1px); }
-  100% { transform: scale(1) translateY(0); opacity: 1; }
-}
+
+
 .nav-cta-mobile { display: none; }
 
 .header-cta {
@@ -316,10 +312,13 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.55rem); }
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transform: scale(1.03);
-  transition: none;
+  transform: scale(1.04);
+  z-index: 0;
+  transition: opacity .9s cubic-bezier(.22, .61, .36, 1), transform 1.6s cubic-bezier(.22, .61, .36, 1);
+  will-change: opacity, transform;
 }
-.swap-img.active { opacity: 1; transform: scale(1); }
+.swap-img.leaving { opacity: 1; transform: scale(1); z-index: 1; }  /* stays solid underneath */
+.swap-img.active  { opacity: 1; transform: scale(1); z-index: 2; }  /* fades in on top */
 
 /* Laptops / short desktop screens: keep the whole hero in the first viewport */
 @media (min-width: 821px) and (max-height: 850px) {
@@ -549,9 +548,13 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.55rem); }
 }
 .bz-service-prefix { font-weight: 400; }
 .bz-service-last { font-weight: 400; transition: color .28s ease; }
-.bz-service-item.is-active .bz-service-inner,
+/* Desktop: the selected service (drives the dark panel) */
+@media (min-width: 1101px) {
+  .bz-service-item.is-active .bz-service-inner { opacity: 1; transform: none; }
+  .bz-service-item.is-active .bz-service-last { color: var(--honey-text); font-weight: 800; }
+}
+/* Tablet + phone: only the row that is actually open */
 .bz-service-item.is-mobile-open .bz-service-inner { opacity: 1; transform: none; }
-.bz-service-item.is-active .bz-service-last,
 .bz-service-item.is-mobile-open .bz-service-last { color: var(--honey-text); font-weight: 800; }
 
 .bz-mobile-accordion-control { display: none; }
@@ -1112,10 +1115,41 @@ html.bz-locked body { position: fixed; left: 0; right: 0; width: 100%; overflow:
 @media (max-height: 300px) { .bz-enquiry-modal { overflow-y: auto; } }
 
 
-/* Smoother hero image transitions */
+/* ===== Hero entrance: CSS only, one coordinated sequence ===== */
+@keyframes bzRise { from { opacity: 0; transform: translateY(16px); } }
+@keyframes bzFade { from { opacity: 0; } }
+@keyframes bzGrow { from { opacity: 0; transform: scaleX(.6); } }
 
-.swap-img {
-  transition:
-    opacity .7s cubic-bezier(.22, .61, .36, 1),
-    transform .85s cubic-bezier(.22, .61, .36, 1);
+.hero-static h1, .hero-static > p, .hero-static .cta-buttons,
+.inner-hero-kicker, .inner-hero h1, .inner-hero-content > p,
+.hero-chip, .inner-hero-note {
+  animation: bzRise .7s cubic-bezier(.22, .61, .36, 1) backwards;
+}
+.hero-moving, .inner-hero-bg-text { animation: bzFade .8s ease-out backwards; }
+.inner-hero-line { animation: bzGrow .6s cubic-bezier(.22, .61, .36, 1) backwards; }
+
+/* Home: text and image start together */
+.hero-static > p        { animation-delay: .08s; }
+.hero-static .cta-buttons { animation-delay: .16s; }
+.hero-moving            { animation-delay: .08s; }
+
+/* Inner pages */
+.inner-hero h1               { animation-delay: .06s; }
+.inner-hero-content > p      { animation-delay: .14s; }
+.inner-hero-line             { animation-delay: .20s; }
+.hero-chip:nth-child(1)      { animation-delay: .26s; }
+.hero-chip:nth-child(2)      { animation-delay: .31s; }
+.hero-chip:nth-child(3)      { animation-delay: .36s; }
+.hero-chip:nth-child(4)      { animation-delay: .41s; }
+.hero-chip:nth-child(5)      { animation-delay: .46s; }
+.inner-hero-note             { animation-delay: .50s; }
+
+/* Accordion mode: rows are normal when closed, honey when open */
+@media (max-width: 1100px) {
+  .bz-service-inner { opacity: 1; transform: none; }
+}
+
+/* A leftover accordion panel must never show on desktop */
+@media (min-width: 1101px) {
+  .bz-mobile-accordion-panel { display: none; }
 }

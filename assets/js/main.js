@@ -283,7 +283,7 @@
     if (!list || !items.length || !panel || !bg || !number || !title || !copy || !points || !link) return;
 
     var mq = window.matchMedia("(max-width: " + NAV_BREAKPOINT + "px)");
-    var active = "seo";
+    var active = null;
     var changeTimer = null;
 
     /* --- semantics: a group of buttons, not a half-built tablist --- */
@@ -445,222 +445,29 @@
   /* ------------------------------------------------------------------
      Home: hero image carousel (pure CSS transitions, no GSAP needed)
      ------------------------------------------------------------------ */
-  function setupHeroCarousel() {
-  if (!canAnimate) return;
-
-  var images = Array.prototype.slice.call(
-    document.querySelectorAll(".hero-image-swapping .swap-img")
-  );
-
+    function setupHeroCarousel() {
+  if (reduceMotion) return;
+  var images = Array.prototype.slice.call(document.querySelectorAll(".hero-image-swapping .swap-img"));
   if (images.length < 2) return;
 
-  var current = images.findIndex(function (img) {
-    return img.classList.contains("active");
-  });
-
-  if (current < 0) current = 0;
-
-  window.gsap.set(images, {
-    opacity: 0,
-    scale: 1.035
-  });
-
-  window.gsap.set(images[current], {
-    opacity: 1,
-    scale: 1
-  });
+  var current = Math.max(0, images.findIndex(function (img) { return img.classList.contains("active"); }));
+  images[current].classList.add("active");
 
   window.setInterval(function () {
     if (document.hidden) return;
-
-    var previous = images[current];
-
+    var prev = images[current];
     current = (current + 1) % images.length;
-
-    var next = images[current];
-
-    window.gsap.to(previous, {
-      opacity: 0,
-      scale: 1.025,
-      duration: 0.65,
-      ease: "power2.inOut"
-    });
-
-    window.gsap.fromTo(
-      next,
-      {
-        opacity: 0,
-        scale: 1.035
-      },
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 0.85,
-        ease: "power3.out"
-      }
-    );
-  }, 4000);
+    prev.classList.remove("active");
+    prev.classList.add("leaving");
+    images[current].classList.remove("leaving");
+    images[current].classList.add("active");
+    window.setTimeout(function () { prev.classList.remove("leaving"); }, 1000);
+  }, 4500);
 }
 
   /* ------------------------------------------------------------------
      GSAP-only polish (all skipped if GSAP is missing or motion is reduced)
      ------------------------------------------------------------------ */
-  function setupHeroEntrance() {
-  if (!canAnimate) return;
-
-  var hero = document.querySelector(".hero-split");
-  if (!hero) return;
-
-  var heading = hero.querySelector(".hero-static h1");
-  var paragraph = hero.querySelector(".hero-static > p");
-  var buttons = hero.querySelector(".cta-buttons");
-  var visual = hero.querySelector(".hero-moving");
-
-  // Initial positions
-  window.gsap.set(heading, {
-    opacity: 0,
-    y: 28
-  });
-
-  window.gsap.set(paragraph, {
-    opacity: 0,
-    y: 18
-  });
-
-  window.gsap.set(buttons, {
-    opacity: 0,
-    y: 14
-  });
-
-  window.gsap.set(visual, {
-    opacity: 0,
-    x: 35,
-    scale: 0.98
-  });
-
-  // Smooth hero sequence
-  var tl = window.gsap.timeline({
-    defaults: {
-      ease: "power3.out"
-    }
-  });
-
-  tl.to(heading, {
-      opacity: 1,
-      y: 0,
-      duration: 0.75
-    })
-    .to(paragraph, {
-      opacity: 1,
-      y: 0,
-      duration: 0.55
-    }, "-=0.38")
-    .to(buttons, {
-      opacity: 1,
-      y: 0,
-      duration: 0.45
-    }, "-=0.30")
-    .to(visual, {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      duration: 0.95,
-      ease: "power3.out"
-    }, "-=0.35");
-}
- 
-function setupInnerHero() {
-  if (!canAnimate) return;
-
-  var hero = document.querySelector(".inner-hero");
-  if (!hero) return;
-
-  var kicker = hero.querySelector(".inner-hero-kicker");
-  var heading = hero.querySelector("h1");
-  var paragraph = hero.querySelector(".inner-hero-content > p");
-  var line = hero.querySelector(".inner-hero-line");
-  var chips = hero.querySelectorAll(".hero-chip");
-  var note = hero.querySelector(".inner-hero-note");
-  var bgText = hero.querySelector(".inner-hero-bg-text");
-
-  window.gsap.set(kicker, { opacity: 0, y: 10 });
-  window.gsap.set(heading, { opacity: 0, y: 18 });
-  window.gsap.set(paragraph, { opacity: 0, y: 10 });
-  window.gsap.set(line, { opacity: 0, scaleX: 0.75 });
-  window.gsap.set(chips, { opacity: 0, y: 9 });
-  window.gsap.set(note, { opacity: 0, y: 7 });
-
-  if (bgText) {
-    window.gsap.set(bgText, {
-      opacity: 0,
-      scale: 0.98
-    });
-  }
-
-  var tl = window.gsap.timeline({
-    defaults: {
-      ease: "power3.out"
-    }
-  });
-
-  if (bgText) {
-    tl.to(bgText, {
-      opacity: 0.06,
-      scale: 1,
-      duration: 0.75,
-      ease: "power2.out"
-    }, 0);
-  }
-
-  if (kicker) {
-    tl.to(kicker, {
-      opacity: 1,
-      y: 0,
-      duration: 0.32
-    }, 0.04);
-  }
-
-  if (heading) {
-    tl.to(heading, {
-      opacity: 1,
-      y: 0,
-      duration: 0.48
-    }, "-=0.12");
-  }
-
-  if (paragraph) {
-    tl.to(paragraph, {
-      opacity: 1,
-      y: 0,
-      duration: 0.38
-    }, "-=0.24");
-  }
-
-  if (line) {
-    tl.to(line, {
-      opacity: 1,
-      scaleX: 1,
-      duration: 0.3
-    }, "-=0.12");
-  }
-
-  if (chips.length) {
-    tl.to(chips, {
-      opacity: 1,
-      y: 0,
-      duration: 0.28,
-      stagger: 0.045
-    }, "-=0.08");
-  }
-
-  if (note) {
-    tl.to(note, {
-      opacity: 1,
-      y: 0,
-      duration: 0.25
-    }, "-=0.08");
-  }
-}
 
   function setupGeometricOrnaments() {
     if (!canAnimate) return;
@@ -756,8 +563,7 @@ function setupInnerHero() {
     run(setupHeroCarousel);
     run(setupFooterAnimation);
     // Optional GSAP polish
-    run(setupHeroEntrance);
-    run(setupInnerHero);
+    
     run(setupGeometricOrnaments);
     run(setupMagneticButtons);
   }
